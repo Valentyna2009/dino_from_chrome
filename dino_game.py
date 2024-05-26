@@ -6,7 +6,7 @@ import random
 pygame.init()
 
 clock = pygame.time.Clock()
-fps = 80
+fps = 70
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 500
