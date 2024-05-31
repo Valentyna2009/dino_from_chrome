@@ -21,14 +21,18 @@ pygame.display.set_caption('Dino from Chrome')
 # define game variables
 ground_scroll = 0
 scroll_speed = 4
+game_over = False
+
 
 # load images
 bg = pygame.image.load('dino_from_chrome/bg3.jpg')
 ground = pygame.image.load('dino_from_chrome/dino-ground.png')
+dino_jump = pygame.transform.scale(pygame.image.load('dino_from_chrome/DinoJump.png'), (87, 94))
+ground_rect = ground.get_rect()
 
-i = ground.get_height()
-eto_samoe = SCREEN_HEIGHT - i
-toxyj_nj = (SCREEN_HEIGHT - eto_samoe) + 38
+i = ground.get_height() # 352
+eto_samoe = SCREEN_HEIGHT - i # 148
+toxyj_nj = (SCREEN_HEIGHT - eto_samoe) + 38 # 390
 
 
 class Dino(pygame.sprite.Sprite):
@@ -43,8 +47,33 @@ class Dino(pygame.sprite.Sprite):
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
-
+        self.vel = 0
+        # for jumping
+        #self.vel_y = 0
+ 
     def update(self):
+        #dy = 0
+
+        self.vel += 0.5
+        if self.vel == 8:
+            self.vel = 8
+        if self.rect.bottom < int(SCREEN_HEIGHT / 4):
+            self.rect.y += int(self.vel)
+
+        # jumping
+        key_pressed = pygame.key.get_pressed()
+
+        if key_pressed[K_SPACE]:
+            self.rect.y -= 10
+        elif self.rect.y < int(SCREEN_HEIGHT / 1.47):
+            self.rect.y += 10
+
+        # add the gravity
+        #self.vel_y += 1
+        #if self.vel_y > 10:
+        #    self.vel_y = 10
+            
+        #dy += self.vel_y
 
         # handle the animation
         self.counter += 0.5
