@@ -49,24 +49,24 @@ class Dino(pygame.sprite.Sprite):
         self.rect.center = [x, y]
         self.vel = 0
         # for jumping
-        #self.vel_y = 0
+        #self.clicked = False
  
     def update(self):
-        #dy = 0
 
         self.vel += 0.5
         if self.vel == 8:
             self.vel = 8
-        if self.rect.bottom < int(SCREEN_HEIGHT / 4):
-            self.rect.y += int(self.vel)
+        if self.rect.y < int(185):
+           self.rect.y += int(50)
 
         # jumping
         key_pressed = pygame.key.get_pressed()
 
         if key_pressed[K_SPACE]:
             self.rect.y -= 10
-        elif self.rect.y < int(SCREEN_HEIGHT / 1.47):
+        elif self.rect.y <= int(SCREEN_HEIGHT / 1.47): # 340
             self.rect.y += 10
+        print(self.rect.y)
 
         # add the gravity
         #self.vel_y += 1
@@ -107,7 +107,7 @@ while running:
         ground_scroll = 0
 
     # draw and scroll the ground
-    screen.blit(ground, (ground_scroll, int(SCREEN_HEIGHT / 4)))
+    screen.blit(ground, (ground_scroll, int(SCREEN_HEIGHT / 4))) # ground on the screen is 125
 
     # если нажать на крестик, то окно закроется
     for event in pygame.event.get():
