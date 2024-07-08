@@ -52,31 +52,25 @@ class Dino(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
         self.vel = 0
-        # for jumping
-        #self.clicked = False
- 
+        
     def update(self):
 
-        self.vel += 0.5
+        print(f' V = {self.vel}, y = {self.rect.y}')
+        # скорость всегда будет больше. если она == 8, то останется 8
+        self.vel += 0.01
         if self.vel == 8:
             self.vel = 8
-        if self.rect.y < 185:
-           self.rect.y += 10
 
         # jumping
         key_pressed = pygame.key.get_pressed()
 
         if key_pressed[K_SPACE]:
-            self.rect.y -= 10
-        elif self.rect.y <= int(SCREEN_HEIGHT / 1.47): # 340
-            self.rect.y += 10
-
-        # add the gravity
-        #self.vel_y += 1
-        #if self.vel_y > 10:
-        #    self.vel_y = 10
-            
-        #dy += self.vel_y
+            self.rect.y -= 12
+            self.vel = -0.005
+        elif self.rect.y <= int(SCREEN_HEIGHT / 1.47): # 340 отвечает за то, что динозавр находится на той линии
+            self.rect.y += self.vel * 10
+        else:
+            self.vel = 0.0
 
         # handle the animation
         self.counter += 0.5
@@ -97,9 +91,9 @@ class Cactus(pygame.sprite.Sprite):
         self.rect.topleft = [x, y]
 
     def update(self):
-        # заставляет кактус двигаться. Ich bin Magie digga!! Diga ich bin Magie!!!!!
+        # заставляет кактус двигаться. Ich bin Magie digga!! Digga ich bin Magie!!!!!
         self.rect.x -= scroll_speed
-        # если они узодят за пределы экрана, они погибают
+        # если они уxодят за пределы экрана, они погибают
         if self.rect.right < 0:
             self.kill()
 
