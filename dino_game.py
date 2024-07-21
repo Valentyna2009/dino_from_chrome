@@ -20,12 +20,12 @@ pygame.display.set_caption('Dino from Chrome')
 
 # define game variables
 ground_scroll = 0
-scroll_speed = 4
+scroll_speed = 6
 game_over = False
 game_start = False
-pipe_frequency = 1500
+cactus_frequency = 1500
 # it means when we start the game, the pipes were created
-last_pipe = pygame.time.get_ticks() - pipe_frequency
+last_cactus = pygame.time.get_ticks() - cactus_frequency
 
 
 # load images
@@ -42,6 +42,7 @@ toxyj_nj = (SCREEN_HEIGHT - eto_samoe) + 38 # 390
 class Dino(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
+        # the animation of dino
         self.images = []
         self.index = 0
         self.counter = 0
@@ -52,24 +53,29 @@ class Dino(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
         self.vel = 0
+        self.jumped = False
         
     def update(self):
 
         print(f' V = {self.vel}, y = {self.rect.y}')
         # скорость всегда будет больше. если она == 8, то останется 8
         self.vel += 0.01
-        if self.vel == 8:
-            self.vel = 8
+        #if self.vel == 8:
+         #   self.vel = 8
 
         # jumping
         key_pressed = pygame.key.get_pressed()
 
-        if key_pressed[K_SPACE]:
-            self.rect.y -= 12
+        if key_pressed[K_SPACE] and game_start == True and self.jumped == False:
+            # it makes the dino jumping
+            self.jumped = True
+            self.rect.y -= 20
             self.vel = -0.005
-        elif self.rect.y <= int(SCREEN_HEIGHT / 1.47): # 340 отвечает за то, что динозавр находится на той линии
-            self.rect.y += self.vel * 10
+        elif self.rect.y <= int(SCREEN_HEIGHT / 1.47): #self.jumped == True: # 340 отвечает за то, что динозавр находится на той линии
+            self.jumped = False
+            self.rect.y += self.vel * 15
         else:
+            self.jumped = False
             self.vel = 0.0
 
         # handle the animation
@@ -86,7 +92,7 @@ class Dino(pygame.sprite.Sprite):
 class Cactus(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('dino_from_chrome/Cactus/LargeCactus1.png')
+        self.image = pygame.image.load('dino_from_chrome/Cactus/LargeCactus1.1.png')
         self.rect = self.image.get_rect()
         self.rect.topleft = [x, y]
 
@@ -105,7 +111,7 @@ cactus_group = pygame.sprite.Group()
 dinny = Dino(SCREEN_WIDTH / 4, int(SCREEN_HEIGHT / 1.47))
 dino_group.add(dinny)
 
-btm_cactus = Cactus(SCREEN_WIDTH, int(SCREEN_HEIGHT / 1.47))
+btm_cactus = Cactus(SCREEN_WIDTH, int(SCREEN_HEIGHT / 1.4))
 cactus_group.add(btm_cactus)
 
 running = True
@@ -133,11 +139,11 @@ while running:
     if game_over == False and game_start == True:
         # generate new cactuses
         time_now = pygame.time.get_ticks()
-        if time_now - last_pipe > pipe_frequency:
-            new_cactus = Cactus(SCREEN_WIDTH, int(SCREEN_HEIGHT / 1.47))
+        if time_now - last_cactus > cactus_frequency:
+            new_cactus = Cactus(SCREEN_WIDTH, int(SCREEN_HEIGHT / 1.4))
             # add the cactus on the screen
             cactus_group.add(new_cactus)
-            last_pipe = time_now
+            last_cactus = time_now
 
         cactus_group.update()
         
